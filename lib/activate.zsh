@@ -1,23 +1,20 @@
 #! /usr/bin/env zsh
 
 function _venv::activate {
-  if [[ -z ${NAME} && -d ${VENV_PATH} && -n $(grep ${FULL_VENV} ${PATHS_CFG_FILE} 2> /dev/null) ]]; then
-    source ${VENV_PATH}/bin/activate
-    return 0
-  elif [[ -n ${NAME} ]]; then
-    if [[ -d ${ALL_VENVS}/${NAME[2]} ]]; then
-      source ${ALL_VENVS}/${NAME[2]}/bin/activate
-      return 0
+    zparseopts -D -E -A opts n:
+
+    if [[ "$opts[-n]" == "" ]]; then
+        local git_dir=$(git rev-parse --show-toplevel 2> /dev/null)
+        [[ $git_dir ]] && local project_path=$git_dir || local project_path=$PWD
+        local venv_name=$(echo ${project_path##*/} | sd ' ' '_')
     else
-      echo "Venv '${ALL_VENVS}/${NAME[2]}' does not exist."
-      return 2
+        local venv_name=$opts[-n]
     fi
-  fi
+    local venv_path=$VENVSBASEPATH/$venv_name
 
-  if [[ -z ${QUIET} ]]; then
-    echo "Your project '${FULL_VENV}' does not have related venv."
-    echo
-  fi
+    [[ -d $venv_path ]] || {echo "Venv under path '$venv_path' does not exist"; return 1}
+    [[ -n $(grep $project_path $venv_path/.venv_paths 2> /dev/null ) ]] || \
+      {echo "Project under path '$project_path' is not linked to venv under path '$venv_path'"}
 
-  return 2
+    source $venv_path/bin/activate
 }
