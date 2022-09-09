@@ -1,7 +1,8 @@
 [[ -z "$VENVPLUG" ]] && export VENVPLUG="${${(%):-%x}:a:h}"
 [[ -z "$VENVSBASEPATH" ]] && export VENVSBASEPATH="$XDG_DATA_HOME/venvs"
-if [[ -z "$VENVPLUGNOAUTO" -o "$VENVPLUGNOAUTO" == true ]]; then 
-  export VENVPLUGNOAUTO=true
+[[ -z "$VENVPLUGNOAUTO" ]] && export VENVPLUGNOAUTO=true
+
+if [[ $VENVPLUGNOAUTO == true ]]; then
   function chpwd() { venv auto }
 fi
 
