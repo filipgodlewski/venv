@@ -15,7 +15,7 @@ Commands:
                                 Requires '--force' if venv is assigned to multiple projects.
   list                        List all available venvs.
   new                         Create new venv.
-  update (unimplemented)      Update packages in the selected venv.
+  update                      Update packages in the selected venv.
   upgrade (unimplemented)     Upgrade Python version for the selected venv.
 EOF
   return 0
