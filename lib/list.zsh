@@ -2,9 +2,24 @@
 
 function _venv::list {
   zmodload zsh/mapfile
+
+  local venvs=("$VENVSBASEPATH"/*(N))
+  (($#venvs == 0)) && return 0
+
+  if (($# > 0)); then
+    local cmd="${1/--}"
+    [[ $+functions[$0::$cmd] ]] || {$0::help; return 1}
+    $0::$cmd
+    return 0
+  fi
+
+  echo ${venvs##*/}
+}
+
+
+function _venv::list::tree {
   local venvs=("$VENVSBASEPATH"/*(N))
   local no_of_venvs=$#venvs
-  (($no_of_venvs == 0)) && return 0
 
   echo "."
   for i in {1..$no_of_venvs}; do
