@@ -4,7 +4,7 @@ function _venv::list {
   zmodload zsh/mapfile
   local venvs=("$VENVSBASEPATH"/*(N))
   local no_of_venvs=$#venvs
-  (($no_of_venvs == 0)) && {zmodload -u zsh/mapfile; return 0}
+  (($no_of_venvs == 0)) && return 0
 
   echo "."
   for i in {1..$no_of_venvs}; do
@@ -21,5 +21,4 @@ function _venv::list {
       (($j == $no_of_lines)) && echo "$line_start └── $project_path" || echo "$line_start ├── $project_path"
     done
   done
-  zmodload -u zsh/mapfile
 }
