@@ -8,5 +8,4 @@ function _venv::auto {
   [[ $VIRTUAL_ENV == $venv_path ]] && return 0
   deactivate 2> /dev/null
   [[ $is_linked == true ]] && source $venv_path/bin/activate
-  return 0
 }
