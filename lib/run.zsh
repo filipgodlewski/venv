@@ -2,6 +2,9 @@
 
 function _venv::run {
   zparseopts -D -E -A opts -name:=name n:=name
+  [[ $VIRTUAL_ENV == "" && $name == "" ]] && {echo "Neither venv currently active, nor '--name' provided."; return 1}
+  [[ $name == "" ]] && {$VIRTUAL_ENV/bin/python3 "$@"; return $?}
+
   local retval=($(_venv::_get_venv_info --name "$name[2]"))
   local venv_path=$retval[3]
 
