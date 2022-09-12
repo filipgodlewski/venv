@@ -1,10 +1,8 @@
 #! /usr/bin/env zsh
 
 function _venv::activate {
-  (($# == 0)) && {echo "Err: Did not provide venv name"; return 1}
-  
-  local -A info=()
-  local retval=($(_venv::_get_venv_info --venv $1))
+  zparseopts -D -E -A opts -name:
+  local retval=($(_venv::_get_venv_info --venv "$opts[--name]"))
   local project_path=$retval[1]
   local venv_path=$retval[3]
   local is_linked=$retval[4]

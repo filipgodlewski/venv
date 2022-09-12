@@ -1,8 +1,6 @@
 #! /usr/bin/env zsh
 
 function _venv::list {
-  zmodload zsh/mapfile
-
   local venvs=("$VENVSBASEPATH"/*(N))
   (($#venvs == 0)) && return 0
 
@@ -18,6 +16,8 @@ function _venv::list {
 
 
 function _venv::list::tree {
+  zmodload zsh/mapfile
+
   local venvs=("$VENVSBASEPATH"/*(N))
   local no_of_venvs=$#venvs
 
