@@ -4,7 +4,7 @@ function _venv::update {
   [[ ${#@} -eq 0 ]] && {echo "Err: No venvs provided."; return 1}
 
   for venv in $@; do
-    local retval=($(_venv::_get_venv_info --name $venv))
+    local retval=($(_venv::_get_venv_info --name "$venv"))
     local venv_path=$retval[3]
     [[ -d $venv_path ]] || {echo "Err: venv named '$venv' does not exist."; return 2}
     local python_binary=$venv_path/bin/python3

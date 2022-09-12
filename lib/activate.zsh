@@ -2,7 +2,7 @@
 
 function _venv::activate {
   zparseopts -D -E -A opts -name:=name n:=name
-  local retval=($(_venv::_get_venv_info --name "$name"))
+  local retval=($(_venv::_get_venv_info --name "$name[2]"))
   local project_path=$retval[1]
   local venv_path=$retval[3]
   local is_linked=$retval[4]
