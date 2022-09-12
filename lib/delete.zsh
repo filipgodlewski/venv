@@ -6,7 +6,7 @@ function _venv::delete {
   [[ ${#@} -eq 0 ]] && {echo "Err: No venvs provided."; return 1}
 
   for venv in $@; do
-    local retval=($(_venv::_get_venv_info --venv $venv))
+    local retval=($(_venv::_get_venv_info --name $venv))
     local venv_path=$retval[3]
     [[ -d $venv_path ]] || {echo "Err: venv named '$venv' does not exist."; return 2}
     local lines=("${(f@)${mapfile[$venv_path/.venv_paths]%$'\n'}}")
