@@ -1,6 +1,24 @@
 #! /usr/bin/env zsh
 
+function _venv::update::help {
+  cat >&2 <<EOF
+Usage: ${(j: :)${(s.::.)0#_}% help} [VENV]...
+
+Update all outdated python packages for provided venvs (names).
+
+ARGS:
+    <VENV>...    Name of the venv(s) you are willing to clean up.
+
+OPTIONS:
+    -h, --help                        Show this message.
+EOF
+  return 0
+}
 function _venv::update {
+  zparseopts -D -F -K -- {h,-help}=help || return
+
+  (( $#help )) && {$0::help; return 0}
+
   [[ ${#@} -eq 0 ]] && {echo "Err: No venvs provided."; return 1}
 
   for venv in $@; do

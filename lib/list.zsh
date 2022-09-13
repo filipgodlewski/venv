@@ -1,25 +1,38 @@
 #! /usr/bin/env zsh
 
-function _venv::list {
-  local venvs=("$VENVSBASEPATH"/*(N))
-  (($#venvs == 0)) && return 0
+function _venv::list::help {
+  cat >&2 <<EOF
+Usage: ${(j: :)${(s.::.)0#_}% help} [options]
 
-  if (($# > 0)); then
-    local cmd="${1/--}"
-    [[ $+functions[$0::$cmd] ]] || {$0::help; return 1}
-    $0::$cmd
-    return 0
-  fi
+List venvs in a nice form. By default names in similar fashion to `ls` command.
 
-  echo ${venvs##*/}
+OPTIONS:
+        --tree                        Show names and linked projects in tree form.
+    -h, --help                        Show this message.
+EOF
+  return 0
 }
-
-
-function _venv::list::tree {
+function _venv::list {
+  zparseopts -D -F -K -- {h,-help}=help -tree=tree  || return
   zmodload zsh/mapfile
 
-  local venvs=("$VENVSBASEPATH"/*(N))
+  (( $#help )) && {$0::help; return 0}
+
+  if (( $#tree )); then
+    _venv::list::_tree
+  else
+    local venvs=("$VENVS_BASE_PATH"/*(N))
+    local no_of_venvs=$#venvs
+    (( ! $no_of_venvs )) && return 0
+
+    echo ${venvs##*/}
+  fi
+}
+
+function _venv::list::_tree {
+  local venvs=("$VENVS_BASE_PATH"/*(N))
   local no_of_venvs=$#venvs
+  (( ! $no_of_venvs )) && return 0
 
   echo "."
   for i in {1..$no_of_venvs}; do

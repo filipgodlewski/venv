@@ -1,8 +1,23 @@
 #! /usr/bin/env zsh
 
+function _venv::activate::help {
+  cat >&2 <<EOF
+Usage: ${(j: :)${(s.::.)0#_}% help} [VENV]
+
+Activate a venv regardless of being inside the linked project.
+
+OPTIONS:
+    -n, --name                        Venv name.
+    -h, --help                        Show this message.
+EOF
+  return 0
+}
 function _venv::activate {
-  zparseopts -D -E -A opts -name:=name n:=name
-  local retval=($(_venv::_get_venv_info --name "$name[2]"))
+  zparseopts -D -F -K -- {n,-name}:=name {h,-help}=help || return
+
+  (( $#help )) && {$0::help; return 0}
+
+  local retval=($(_venv::_get_venv_info --name "$name[-1]"))
   local project_path=$retval[1]
   local venv_path=$retval[3]
   local is_linked=$retval[4]

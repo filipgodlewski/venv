@@ -1,18 +1,33 @@
 #! /usr/bin/env zsh
 
 function _venv::new::help {
-    cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [--no-activate; --project-path=PATH]
+  cat >&2 <<EOF
+Usage: ${(j: :)${(s.::.)0#_}% help} [options]
+
+Create new venv.
+
+OPTIONS:
+    -a, --activate                    Activate the venv once it is created.
+        --[no-]link                   Do [not] link the venv to the project.
+                                      Note that the venv auto will not work
+                                      for this project.
+    -p, --project-path <path>         Relative or absulute path to the project
+                                      you want to create a venv for.
+    -h, --help                        Show this message.
 EOF
-    return 0
+  return 0
 }
 function _venv::new {
-  zparseopts -D -E -a flags h -help -activate -no-link
-  zparseopts -D -E -A opts -project-path:
+  zparseopts -D -F -K -- \
+    {a,-activate}=activate \
+    -no-link=no_link \
+    -link=link \
+    {p,-project-path}:=ppath \
+    {h,-help}=help || return
 
-  ((${flags[(Ie)-h]} > 0 || ${flags[(Ie)--help]} > 0)) && {$0::help; return 0}
+  (( $#help )) && {$0::help; return 0}
 
-  local retval=($(_venv::_get_venv_info --project-path "$opts[--project-path]"))
+  local retval=($(_venv::_get_venv_info --project-path "$ppath[-1]"))
   local project_path=$retval[1]
   local name=$retval[2]
   local venv_path=$retval[3]
@@ -21,26 +36,27 @@ function _venv::new {
   [[ $is_linked == true ]] && {echo "'$project_path' is already assigned to venv named '$name'"; return 2}
   if [[ -d $venv_path ]]; then
     echo "Venv '$name' already exists and is assigned to another project(s)."
-    ((${flags[(Ie)--no-link]} > 0)) && return 1
-    echo "Do you want to reuse it for the current project? [Y/n] \c"
-    read answer
+    (( $#no_link )) && return 1
+    if (( ! $#link )); then
+      read answer"?Do you want to reuse it for the current project? [Y/n] "
 
-    case $answer in
-      [yY]|"")
-        unset answer
-        ;;
-      *)
-        unset answer
-        return 0
-        ;;
-    esac
+      case $answer in
+        [yY]|"")
+          unset answer
+          ;;
+        *)
+          unset answer
+          return 0
+          ;;
+      esac
+    fi
     echo "$project_path" >> $venv_path/.venv_paths
     echo "Linked to '$project_path'"
   else
     python3 -m venv $venv_path --system-site-packages --upgrade-deps
     echo "\nNew venv created under: '$venv_path'"
-    ((${flags[(Ie)--no-link]} > 0)) && {echo "$project_path" > $venv_path/.venv_paths; echo "Linked to '$project_path'"}
+    (( $#no_link )) || {echo "$project_path" > $venv_path/.venv_paths; echo "Linked to '$project_path'"}
   fi
 
-  ((${flags[(Ie)--activate]} > 0)) && source $venv_path/bin/activate
+  (( $#activate )) && source $venv_path/bin/activate
 }
