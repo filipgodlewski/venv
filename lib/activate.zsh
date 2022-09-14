@@ -13,6 +13,7 @@ EOF
   return 0
 }
 function _venv::activate {
+  trap "unset help name" EXIT ERR INT QUIT STOP CONT
   zparseopts -D -F -K -- {n,-name}:=name {h,-help}=help || return
 
   (( $#help )) && {$0::help; return 0}

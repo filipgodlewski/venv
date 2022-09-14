@@ -14,6 +14,7 @@
 #   whether the venv is linked to the project path
 #######################################
 function _venv::_get_venv_info {
+  trap "unset name ppath" EXIT ERR INT QUIT STOP CONT
   zparseopts -D -F -K -- {n,-name}:=name {p,-project-path}:=ppath || return
 
   local project_path=${ppath[-1]:-${$(git rev-parse --show-toplevel 2> /dev/null):-$PWD}}

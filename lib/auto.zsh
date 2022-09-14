@@ -12,6 +12,7 @@ EOF
   return 0
 }
 function _venv::auto {
+  trap "unset help" EXIT ERR INT QUIT STOP CONT
   zparseopts -D -F -K -- {h,-help}=help || return
 
   (( $#help )) && {$0::help; return 0}

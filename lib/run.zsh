@@ -22,12 +22,13 @@ EOF
   return 0
 }
 function _venv::run {
-  zparseopts -D -F -K -- {n,-name}:=name {h,-help}=help || return
+  trap "unset name" EXIT ERR INT QUIT STOP CONT
+  zparseopts -D -E -K -- {n,-name}:=name || return
 
-  (( $#help )) && {$0::help; return 0}
+  (( $#name && ${#@} )) || {$0::help; return 0}
 
-  (( ! $#VIRTUAL_ENV && $#name )) && {echo "Neither venv currently active, nor '--name' provided."; return 1}
-  (( $#name )) && {$VIRTUAL_ENV/bin/python3 "$@"; return $?}
+  (( $#VIRTUAL_ENV && $#name )) || {echo "Neither venv currently active, nor '--name' provided."; return 1}
+  [[ -n $VIRTUAL_ENV ]] && {$VIRTUAL_ENV/bin/python3 "$@"; return $?}
 
   local retval=($(_venv::_get_venv_info --name "$name[-1]"))
   local venv_path=$retval[3]

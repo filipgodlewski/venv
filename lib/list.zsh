@@ -13,6 +13,7 @@ EOF
   return 0
 }
 function _venv::list {
+  trap "unset help tree" EXIT ERR INT QUIT STOP CONT
   zparseopts -D -F -K -- {h,-help}=help -tree=tree  || return
   zmodload zsh/mapfile
 

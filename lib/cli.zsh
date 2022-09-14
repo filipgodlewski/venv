@@ -25,9 +25,10 @@ EOF
   return 0
 }
 function venv {
+  trap "unset help" EXIT ERR INT QUIT STOP CONT
   zparseopts -D -F -K -- {h,-help}=help || return
 
-  (( ! ${#@} && $#help )) && {_$0::help; return 0}
+  (( ${#@} == 0 && $#help )) && {_$0::help; return 0}
 
   (($# > 0 && $+functions[_$0::$1])) || { _$0::help; return 1 }
   local cmd="$1"; shift

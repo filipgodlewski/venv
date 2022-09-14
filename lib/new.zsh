@@ -18,6 +18,7 @@ EOF
   return 0
 }
 function _venv::new {
+  trap "unset help activate link no_link ppath" EXIT ERR INT QUIT STOP CONT
   zparseopts -D -F -K -- \
     {a,-activate}=activate \
     -no-link=no_link \
@@ -38,7 +39,7 @@ function _venv::new {
     echo "Venv '$name' already exists and is assigned to another project(s)."
     (( $#no_link )) && return 1
     if (( ! $#link )); then
-      read answer"?Do you want to reuse it for the current project? [Y/n] "
+      read answer"?Do you want to reuse it for project under '$project_path'? [Y/n] "
 
       case $answer in
         [yY]|"")

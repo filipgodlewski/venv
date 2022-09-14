@@ -17,12 +17,13 @@ EOF
   return 0
 }
 function _venv::delete {
+  trap "unset help force" EXIT ERR INT QUIT STOP CONT
   zparseopts -D -F -K -- {f,-force}=force {h,-help}=help || return
 
   (( $#help )) && {$0::help; return 0}
 
   zmodload zsh/mapfile
-  (( ! ${#@} )) && {echo "Err: No venvs provided."; return 1}
+  (( ${#@} == 0 )) && {echo "Err: No venvs provided."; return 1}
 
   for venv in $@; do
     local retval=($(_venv::_get_venv_info --name "$venv"))
