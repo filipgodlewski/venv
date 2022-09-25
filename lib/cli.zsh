@@ -18,7 +18,7 @@ SUBCOMMANDS:
                                       Requires '--force' if venv is assigned to multiple projects.
     list                              List all available venvs.
     new                               Create new venv.
-    run (unimplemented)               Run either a script or an executable.
+    run                               Run either a script or an executable.
     update                            Update packages in the selected venv.
     upgrade (unimplemented)           Upgrade Python version for the selected venv.
 EOF
