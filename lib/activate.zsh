@@ -1,6 +1,6 @@
 #! /usr/bin/env zsh
 
-function _venv::activate::help {
+function +venv::activate {
   cat >&2 <<EOF
 Usage: ${(j: :)${(s.::.)0#_}% help} [VENV]
 
@@ -12,13 +12,13 @@ OPTIONS:
 EOF
   return 0
 }
-function _venv::activate {
-  trap "unset help name" EXIT ERR INT QUIT STOP CONT
-  zparseopts -D -F -K -- {n,-name}:=name {h,-help}=help || return
+function .venv::activate {
+  local opt_help opt_name
+  zparseopts -D -F -K -- {h,-help}=opt_help {n,-name}:=opt_name
 
-  (( $#help )) && {$0::help; return 0}
+  (( $#opt_help )) && {+${0#.}; return 0}
 
-  local retval=($(_venv::_get_venv_info --name "$name[-1]"))
+  local retval=($(.venv::_get_venv_info --name "$opt_name[-1]"))
   local project_path=$retval[1]
   local venv_path=$retval[3]
   local is_linked=$retval[4]

@@ -1,6 +1,6 @@
 #! /usr/bin/env zsh
 
-function _venv::auto::help {
+function .venv::auto {
   cat >&2 <<EOF
 Usage: ${(j: :)${(s.::.)0#_}% help}
 
@@ -11,13 +11,13 @@ OPTIONS:
 EOF
   return 0
 }
-function _venv::auto {
-  trap "unset help" EXIT ERR INT QUIT STOP CONT
-  zparseopts -D -F -K -- {h,-help}=help || return
+function .venv::auto {
+  local opt_help
+  zparseopts -D -F -K -- {h,-help}=opt_help
 
-  (( $#help )) && {$0::help; return 0}
+  (( $#opt_help )) && {+${0#.}; return 0}
 
-  local retval=($(_venv::_get_venv_info))
+  local retval=($(.venv::_get_venv_info))
   local venv_path=$retval[3]
   local is_linked=$retval[4]
 

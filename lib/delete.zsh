@@ -1,6 +1,6 @@
 #! /usr/bin/env zsh
 
-function _venv::delete::help {
+function +venv::delete {
   cat >&2 <<EOF
 Usage: ${(j: :)${(s.::.)0#_}% help} [options] [VENV]...
 
@@ -16,21 +16,22 @@ OPTIONS:
 EOF
   return 0
 }
-function _venv::delete {
-  trap "unset help force" EXIT ERR INT QUIT STOP CONT
-  zparseopts -D -F -K -- {f,-force}=force {h,-help}=help || return
+function .venv::delete {
+  local opt_help opt_force
+  zparseopts -D -F -K -- {h,-help}=opt_help {f,-force}=opt_force
 
-  (( $#help )) && {$0::help; return 0}
+  (( $#opt_help )) && {+${0#.}; return 0}
 
   zmodload zsh/mapfile
   (( ${#@} == 0 )) && {echo "Err: No venvs provided."; return 1}
 
+  local venv
   for venv in $@; do
-    local retval=($(_venv::_get_venv_info --name "$venv"))
+    local retval=($(.venv::_get_venv_info --name "$venv"))
     local venv_path=$retval[3]
     [[ -d $venv_path ]] || {echo "Err: venv named '$venv' does not exist."; return 2}
     local lines=("${(f@)${mapfile[$venv_path/.venv_paths]%$'\n'}}")
-    if (( ${#lines:#} > 1 && $#force )); then
+    if (( ${#lines:#} > 1 && $#opt_force )); then
       echo "Err: The venv you want to delete is used by more than 1 project:"
       echo ${(F@)lines:#}
       echo

@@ -1,6 +1,6 @@
 #! /usr/bin/env zsh
 
-function _venv::cleanup::help {
+function +venv::cleanup {
   cat >&2 <<EOF
 Usage: ${(j: :)${(s.::.)0#_}% help} [options]
 
@@ -11,16 +11,17 @@ OPTIONS:
 EOF
   return 0
 }
-function _venv::cleanup {
-  trap "unset help" EXIT ERR INT QUIT STOP CONT
-  zparseopts -D -F -K -- {h,-help}=help || return
+function .venv::cleanup {
+  local opt_help
+  zparseopts -D -F -K -- {h,-help}=opt_help
   zmodload zsh/mapfile
 
-  (( $#help )) && {$0::help; return 0}
+  (( $#opt_help )) && {+${0#.}; return 0}
 
-  local files=("$VENVS_BASE_PATH"/*/.venv_paths(N))
+  local files=("$VENVS_BASE_DIR"/*/.venv_paths(N))
   (($#files == 0)) && return 0
 
+  local file
   for file in $files; do
     local lines=("${(f@)${mapfile[$file]%$'\n'}}")
     for line in $lines; do

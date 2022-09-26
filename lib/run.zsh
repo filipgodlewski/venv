@@ -1,6 +1,6 @@
 #! /usr/bin/env zsh
 
-function _venv::run::help {
+function .venv::run {
   cat >&2 <<EOF
 Usage: ${(j: :)${(s.::.)0#_}% help} [options] <COMMAND>
 
@@ -21,18 +21,18 @@ COMMAND:
 EOF
   return 0
 }
-function _venv::run {
-  trap "unset help name" EXIT ERR INT QUIT STOP CONT
-  zparseopts -D -E -K -- {h,-help}=help {n,-name}:=name || return
+function .venv::run {
+  local opt_help opt_name
+  zparseopts -D -E -K -- {h,-help}=opt_help {n,-name}:=opt_name
 
   if [[ -n $VIRTUAL_ENV ]]; then
-    (( ${#@} )) || {$0::help; return 0}
-    (( $#name )) || {$VIRTUAL_ENV/bin/python3 "$@"; return $?}
+    (( ${#@} )) || {+${0#.}; return 0}
+    (( $#opt_name )) || {$VIRTUAL_ENV/bin/python3 "$@"; return $?}
   fi
-  (( $#help )) && {$0::help; return 0}
-  (( $#name )) || {echo "Neither venv currently active, nor '--name' provided."; return 1}
+  (( $#opt_help )) && {+${0#.}; return 0}
+  (( $#opt_name )) || {echo "Neither venv currently active, nor '--name' provided."; return 1}
 
-  local retval=($(_venv::_get_venv_info --name "$name[-1]"))
+  local retval=($(.venv::_get_venv_info --name "$opt_name[-1]"))
   local venv_path=$retval[3]
 
   [[ -d $venv_path ]] || {echo "Err: Venv under path '$venv_path' does not exist"; return 1}

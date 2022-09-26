@@ -1,6 +1,6 @@
 #! /usr/bin/env zsh
 
-function _venv::help {
+function +venv {
   cat >&2 <<EOF
 venv -- A simple Python virtual environment wrapper.
 
@@ -25,12 +25,12 @@ EOF
   return 0
 }
 function venv {
-  trap "unset help" EXIT ERR INT QUIT STOP CONT
-  zparseopts -D -F -K -- {h,-help}=help || return
+  local opt_help
+  zparseopts -D -F -K -- {h,-help}=opt_help || return
 
-  (( ${#@} == 0 && $#help )) && {_$0::help; return 0}
+  (( ${#@} == 0 && $#opt_help )) && {+$0; return 0}
 
-  (($# > 0 && $+functions[_$0::$1])) || { _$0::help; return 1 }
+  (($# > 0 && $+functions[.$0::$1])) || { +$0; return 1 }
   local cmd="$1"; shift
-  _venv::$cmd "$@"
+  .venv::$cmd "$@"
 }
