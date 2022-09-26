@@ -2,7 +2,8 @@
 
 function +venv::cleanup {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [options]
+USAGE:
+    ${(j: :)${(s.::.)0#+}} [options]
 
 Clean up all project references in venv paths files that are unreachable.
 

@@ -2,7 +2,8 @@
 
 function +venv::new {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [options]
+USAGE:
+    ${(j: :)${(s.::.)0#+}} [options]
 
 Create new venv.
 

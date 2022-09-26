@@ -5,7 +5,7 @@ function +venv {
 venv -- A simple Python virtual environment wrapper.
 
 USAGE:
-  ${(j: :)${(s.::.)0#_}% help} <SUBCOMMAND>
+    ${(j: :)${(s.::.)0#+}} <SUBCOMMAND>
 
 OPTIONS:
     -h, --help                        Show this message.

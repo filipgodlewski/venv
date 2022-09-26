@@ -2,7 +2,8 @@
 
 function +venv::activate {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [VENV]
+USAGE:
+    ${(j: :)${(s.::.)0#+}} [VENV]
 
 Activate a venv regardless of being inside the linked project.
 

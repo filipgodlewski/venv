@@ -2,7 +2,8 @@
 
 function .venv::run {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [options] <COMMAND>
+USAGE:
+    ${(j: :)${(s.::.)0#+}} [options] <COMMAND>
 
 Run command inside a specified venv, like if it was active.
 

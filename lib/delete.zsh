@@ -2,7 +2,8 @@
 
 function +venv::delete {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [options] [VENV]...
+USAGE:
+    ${(j: :)${(s.::.)0#+}} [options] [VENV]...
 
 Delete venv(s).
 

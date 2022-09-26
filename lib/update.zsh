@@ -2,7 +2,8 @@
 
 function +venv::update {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [VENV]...
+USAGE:
+    ${(j: :)${(s.::.)0#+}} [VENV]...
 
 Update all outdated python packages for provided venvs (names).
 

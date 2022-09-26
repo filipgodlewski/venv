@@ -2,7 +2,8 @@
 
 function .venv::auto {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help}
+USAGE:
+    ${(j: :)${(s.::.)0#+}}
 
 Automatically de/activate venv based on the dir you cd into.
 

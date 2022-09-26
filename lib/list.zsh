@@ -2,7 +2,8 @@
 
 function +venv::list {
   cat >&2 <<EOF
-Usage: ${(j: :)${(s.::.)0#_}% help} [options]
+USAGE:
+    ${(j: :)${(s.::.)0#+}} [options]
 
 List venvs in a nice form. By default names in similar fashion to `ls` command.
 
@@ -43,7 +44,7 @@ function .venv::list::_tree {
 
     local lines=("${(f@)${mapfile[$venv/.venv_paths]%$'\n'}}")
     local no_of_lines=$#lines
-    local j
+    unset j; local j
     for j in {1..$no_of_lines}; do
       local line=$lines[$j]
       [[ $line == "" ]] && continue
