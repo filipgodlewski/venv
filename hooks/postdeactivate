@@ -1,6 +1,8 @@
 #!/opt/homebrew/bin/zsh
 # This hook is sourced after every virtualenv is deactivated.
 
+if ! hash collect-exports 2> /dev/null; then return; fi
+
 [[ $#OLD_PYFLYBY_PATH ]] && {
   export PYFLYBY_PATH=$OLD_PYFLYBY_PATH
   unset OLD_PYFLYBY_PATH

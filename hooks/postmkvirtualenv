@@ -1,6 +1,8 @@
 #!/opt/homebrew/bin/zsh
 # This hook is sourced after a new virtualenv is activated.
 
+if ! hash collect-exports 2> /dev/null; then return; fi
+
 local installed_packages="$($VIRTUAL_ENV/bin/python -m pip freeze | sed 's/==.*/''/')"
 
 local pyflyby_path=$VIRTUAL_ENV/pyflyby
