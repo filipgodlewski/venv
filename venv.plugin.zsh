@@ -11,9 +11,9 @@ local _bin_path="${PIPX_HOME:-$HOME/.local/pipx}/venvs/virtualenvwrapper/bin"
 [[ -z "$VIRTUALENVWRAPPER_PYTHON" ]] && export VIRTUALENVWRAPPER_PYTHON="$_bin_path/python"
 unset _bin_path
 
-[[ -z "$PROJECT_HOME" ]] && export PROJECT_HOME=$HOME/work
-[[ -z "$VIRTUALENVWRAPPER_VIRTUALENV_ARGS"]] && export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages --download'
-[[ -z "$VIRTUALENVWRAPPER_HOOK_DIR" ]] && export VIRTUALENVWRAPPER_HOOK_DIR="${0:h}"/hooks
+[[ -z "$PROJECT_HOME" ]] && export PROJECT_HOME=$HOME/projects
+[[ -z "$VIRTUALENVWRAPPER_VIRTUALENV_ARGS" ]] && export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--download'
+[[ -z "$VIRTUALENVWRAPPER_HOOK_DIR" ]] && export VIRTUALENVWRAPPER_HOOK_DIR="${0:h}/hooks"
 
 
 source virtualenvwrapper.sh
@@ -57,7 +57,7 @@ function rmdeadrefs {
   for file in $files; do
     local lines=("${(f@)${mapfile[$file]%$'\n'}}")
     for line in $lines; do
-      [[ -d "$line" ]] || { echo "$(grep -v $line $file)" > $file; echo "Removed ref: '$line' from $file }
+      [[ -d "$line" ]] || { echo "$(grep -v $line $file)" > $file; echo "Removed ref: '$line' from $file" }
     done
   done
 
