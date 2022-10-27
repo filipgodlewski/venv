@@ -1,0 +1,14 @@
+#!/opt/homebrew/bin/zsh
+# This hook is sourced after a new virtualenv is activated.
+
+local installed_packages="$($VIRTUAL_ENV/bin/python -m pip freeze | sed 's/==.*/''/')"
+
+local pyflyby_path=$VIRTUAL_ENV/pyflyby
+
+mkdir -p $pyflyby_path
+
+local package
+for package in ${(f)installed_packages}; do
+  [[ "$package" =~ "-" ]] || echo "import $package" > $pyflyby_path/$package.py
+  collect-exports -n $package 2> /dev/null >> $pyflyby_path/$package.py
+done
