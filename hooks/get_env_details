@@ -1,0 +1,26 @@
+#!/opt/homebrew/bin/zsh
+# This hook is run when the list of virtualenvs is printed so each name can include details.
+# argument: environment name
+
+zmodload zsh/mapfile
+
+local env_name=$1
+local venv_path=$WORKON_HOME/$env_name
+local lines=("${(f@)${mapfile[$venv_path/$VIRTUALENVWRAPPER_PROJECT_FILENAME]%$'\n'}}")
+local no_of_lines=$#lines
+
+echo ":Associated projects:"
+
+local i
+for i in {1..$no_of_lines}; do
+  local line=$lines[$i]
+  [[ $line == "" ]] && continue
+  [[ -d $line ]] && local project_path="$line" || local project_path="$line (UNREACHABLE)"
+  (($i == $no_of_lines)) && echo "└── $project_path" || echo "├── $project_path"
+done
+
+echo "\n:Installed packages:"
+
+$venv_path/bin/python -m pip freeze
+
+zmodload -ui zsh/mapfile

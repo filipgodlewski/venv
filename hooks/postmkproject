@@ -1,0 +1,8 @@
+#!/opt/homebrew/bin/zsh
+# This hook is run after a new project is activated.
+
+if hash gh 2> /dev/null; then 
+  gh repo create
+else
+  git init
+fi

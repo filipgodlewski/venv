@@ -1,0 +1,4 @@
+#!/opt/homebrew/bin/zsh
+# This hook is sourced during the startup phase when loading virtualenvwrapper.sh.
+
+mkdir -p $PROJECT_HOME
