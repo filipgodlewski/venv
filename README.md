@@ -90,7 +90,7 @@ It currently works on the following hooks:
 - postdeactivate
 - postmkvirtualenv
 
-## gh
+### gh
 
 If gh is installed, it will be used to setup a git repo (`gh repo create`) in an
 interactive mode. Otherwise, git will be used for that (that's not an option).
@@ -98,6 +98,24 @@ interactive mode. Otherwise, git will be used for that (that's not an option).
 It currently works on the following hooks:
 
 - postmkproject
+
+### lsvirtualenv
+
+Prints all venvs and their related projects, and weather it is unreachable
+(which means that this dir does not exist)
+
+Hooks in scope:
+
+- get_env_details
+
+### initialize
+
+Creates the `$PROJECT_HOME` dir to make sure that virtualenvwrapper doesn't
+throw any error if you use `mkproject`.
+
+Hooks in scope:
+
+- initialize
 
 ## 🪢 Contributing
 
