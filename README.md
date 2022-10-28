@@ -81,7 +81,7 @@ rmdeadrefs
 ### pyflyby
 
 If pyflyby is installed, it will be used to potentially collect exports for
-all installed packages (collect-exports). To read more about pyflyby,
+all installed packages (`collect-exports`). To read more about pyflyby,
 please head on to [deshaw/pyflyby](https://github.com/deshaw/pyflyby).
 
 It currently works on the following hooks:
@@ -92,7 +92,7 @@ It currently works on the following hooks:
 
 ## gh
 
-If gh is installed, it will be used to setup a git repo (gh repo create) in an
+If gh is installed, it will be used to setup a git repo (`gh repo create`) in an
 interactive mode. Otherwise, git will be used for that (that's not an option).
 
 It currently works on the following hooks:
